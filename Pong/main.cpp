@@ -47,3 +47,31 @@ void Update(float dt) {
 
     paddles[0].move(Vector2f(0.f, direction * paddleSpeed * dt));
 }
+
+void render(sf::RenderWindow& window) {
+    window.draw(paddles[0]);
+    window.draw(paddles[1]);
+    window.draw(ball);
+}
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode({ game_width, game_height }), PONG);
+
+    //Init and load 
+    init();
+    while (!windowIsOpen()) {
+        // Calculate dt
+        //...
+        window.clear();
+        update(dt);
+        render(window);
+        // wait for the time_step to finish before displaying the next frame
+        sf::sleep(time_step);
+        // Wait for Vsync
+        window.display();
+
+
+    }
+    //Unload and shutdown
+    clean();
+}
