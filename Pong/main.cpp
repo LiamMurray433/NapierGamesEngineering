@@ -28,42 +28,48 @@ void init() {
     }
     // Set size and origin of ball
     ball.setRadius(ballRadius);
-    ball.setOrigin( ballRadius / 2.f); //Should be half the ball width and height
+    ball.setOrigin(ballRadius / 2.f, ballRadius / 2.f); //Should be half the ball width and height
     // reset paddle position
     paddles[0].setPosition(paddleOffsetWall + paddleSize.x / 2.f, gameHeight / 2.f);
     paddles[1].setPosition(paddleSize / 2.f);
     // reset Ball Position
-    ball.setPosition(ballRadius / 2.f);
+    ball.setPosition(ballRadius / 2.f, ballRadius / 2.f);
 }
 
 void Update(float dt) {
     float direction = 0.0f;
-    if (sf::keyboard::keyIsPressed(controls[0])) {
-        direction--
+    if (sf::Keyboard::isKeyPressed(controls[0])) {
+        direction--;
     }
-    if (sf::keyboard::keyIsPress(controls[1])) {
-        direction++
+    if (sf::Keyboard::isKeyPressed(controls[1])) {
+        direction++;
     }
 
-    paddles[0].move(Vector2f(0.f, direction * paddleSpeed * dt));
+    paddles[0].move(sf::Vector2f(0.f, direction * paddleSpeed * dt));
 }
 
-void render(sf::RenderWindow& window) {
+void render(sf::RenderWindow & window) {
     window.draw(paddles[0]);
     window.draw(paddles[1]);
     window.draw(ball);
 }
 
+void clean() {
+    //free up the memory if necessary.
+}
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode({ game_width, game_height }), PONG);
+    sf::RenderWindow window(sf::VideoMode({ 1024, 768}), "PONG");
 
     //Init and load 
     init();
-    while (!windowIsOpen()) {
+    static sf::Clock clock;
+    const float dt = clock.restart().asSeconds();
+    while (!window.isOpen()) {
         // Calculate dt
         //...
         window.clear();
-        update(dt);
+        Update(dt);
         render(window);
         // wait for the time_step to finish before displaying the next frame
         sf::sleep(time_step);
