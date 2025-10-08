@@ -19,8 +19,8 @@ void Ship::update(const float& dt) {}
 //Although we set this to pure virtual, we still have to define it.
 Ship::~Ship() = default
 
-Invader::Invader() : Ship() {}
-Invader::Invader(const Invader& inv) : Ship(Inv) {}
+Invader::Invader() : Ship{}
+Invader::Invader(const Invader &inv): Ship(Inv){}
 Invader::Invader(sf::IntRect ir, sf::Vector2f pos) : Ship(ir) {
 	setOrigin(Vector2f(16.f, 16.f));;
 	setPosition(pos);
