@@ -15,7 +15,7 @@ public:
     virtual void update(const float &dt);
     virtual void explode();
     virtual void move_down();
-    bool is_exploded();
+    bool is_exploded() const;
     float explosion_time = 0.1f;
 
 

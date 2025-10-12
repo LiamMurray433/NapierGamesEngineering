@@ -12,7 +12,7 @@ using gs = GameSystem;
 
 bool Invader::direction = true;
 float Invader::speed = 10.f;
-float Invader : firetime = 0.0f;
+float Invader:: firetime = 0.0f;
 float Player::firetime = 0.0f;
 
 
@@ -20,11 +20,11 @@ float Player::firetime = 0.0f;
 Ship::Ship() {};
 
 Ship::Ship(const Ship& s) :
-	_sprite(s._sprite), _exploded(s.exploded) {}
+	_sprite(s._sprite), _exploded(s._exploded) {}
 
 Ship::Ship(sf::IntRect ir) : Sprite() {
 	_sprite = ir;
-	setTexture(spritesheet);
+	setTexture(gs::spritesheet);
 	setTextureRect(_sprite);
 };
 
@@ -38,7 +38,7 @@ void Ship::update(const float& dt) {
 }
 
 void Ship::explode() {
-	setTexture(sf::IntRect(sf::Vector2i(param::sprite_size * 4.f, param::sprite_size), sf::Vector2i(param::sprite_size, param::sprite_size)));
+	setTextureRect(sf::IntRect(sf::Vector2i(param::sprite_size * 4.f, param::sprite_size), sf::Vector2i(param::sprite_size, param::sprite_size)));
 	Invader::speed + param::acc;
 	_exploded = true;
 }
@@ -53,13 +53,15 @@ bool Ship::is_exploded() const {
 }
 
 void Ship::move_down() {
-	move(sf::Vector2f(0.0f,param::down))
+	move(sf::Vector2f(0.0f, param::down));
 }
 
-Invader::Invader() : Ship{}
-Invader::Invader(const Invader &inv): Ship(Inv){}
+Invader::Invader() : Ship() {}
+
+Invader::Invader(const Invader& inv) : Ship(inv) {}
+
 Invader::Invader(sf::IntRect ir, sf::Vector2f pos) : Ship(ir) {
-	setOrigin(Vector2f(16.f, 16.f));;
+	setOrigin(param::sprite_size / 2.f, param::sprite_size / 2.f);
 	setPosition(pos);
 }
 
@@ -76,7 +78,7 @@ void Invader::update(const float& dt) {
 	if ((direction && getPosition().x > param::game_width - param::sprite_size / 2.f) ||
 		(!direction && getPosition().x < param::sprite_size / 2.f)) {
 		direction = !direction;
-		for (std::shared_ptr<Ship>& ship : gs:ships) {
+		for (std::shared_ptr<Ship>& ship : gs::ships) {
 			ship->move_down();
 		}
 	}
@@ -94,8 +96,8 @@ Player::Player() :
 		- static_cast<float>(param::sprite_size));
 }
 
-void Player::update(const float dt) {
-	Ship::Update(dt);
+void Player::update(const float &dt) {
+	Ship::update(dt);
 
 	if (_exploded)
 		return;
@@ -103,14 +105,14 @@ void Player::update(const float dt) {
 	firetime -= dt;
 
 	// move left
-	if (sf::Keyboard::isPressed(sf::Keyboard::Left) &&
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) &&
 		getPosition().x > param::sprite_size / 2.f) {
 		move(-param::player_speed * dt, 0);
 	}
 
 	//move right
 
-	if (sf::Keyboard::isPressed(sf::Keyboard::Right) &&
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
 		getPosition().x < param::game_width -param::sprite_size / 2.f){
 		move(param::player_speed * dt, 0);
 	}

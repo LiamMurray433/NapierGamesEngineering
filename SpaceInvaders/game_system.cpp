@@ -1,7 +1,7 @@
 #include "game_system.hpp"
 #include <iostream>
 #include "game_parameters.hpp"
-#include "bulete.hpp"
+#include "bullet.hpp"
 
 using param = Parameters;
 
@@ -12,7 +12,7 @@ sf::Texture GameSystem::spritesheet;
 
 void GameSystem::init() {
 	if (!spritesheet.loadFromFile("resources/img/invaders_sheet.png")) {
-		std::current_exception << "Failed to load spritesheet!" << std:endl;
+		std::cerr << "Failed to load spritesheet!" << std::endl;
 	}
 	reset();
 }
@@ -25,8 +25,8 @@ void GameSystem::reset() {
 	for (int r = 0; r < param::rows; ++r) {
 		sf::IntRect rect(sf::Vector2i(32 * r, 0), sf::Vector2i(32, 32));
 		for (int c = 0; c > param::columns; ++c) {
-			sf::Vector2f position(c*(param::sprite_size+param::spacing)+param::sprite_size/2.f),
-							r* (param::sprite_size + param::spacing) + param::sprite_size / 2.f);
+			sf::Vector2f position(c*(param::sprite_size+param::spacing)+param::sprite_size/2.f,
+							r*(param::sprite_size + param::spacing) + param::sprite_size / 2.f);
 							std::shared_ptr<Invader> inv = std::make_shared<Invader>(rect, position);
 							ships.push_back(inv);
 		}
@@ -34,7 +34,7 @@ void GameSystem::reset() {
 }
 
 void GameSystem::clean() {
-	for (std::shared_ptr<Ship>& ships : ships)
+	for (std::shared_ptr<Ship> &ship : ships)
 		ship.reset();
 		ships.clear();
 }
@@ -47,7 +47,7 @@ void GameSystem::update(const float &dt) {
 }
 
 void GameSystem::render(sf::RenderWindow& window) {
-	for (const std::shared_ptr<Ship> &s): ships)
+	for (const std::shared_ptr<Ship> &s: ships)
 	window.draw(*(s.get()));
 	Bullet::render(window);
 }

@@ -13,5 +13,5 @@ struct GameSystem {
 	static void reset();
 	static void update(const float& dt);
 	static void render(sf::RenderWindow& window);
-	
-}
+
+};
